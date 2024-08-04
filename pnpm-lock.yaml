@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      chrome-devtools-frontend:
+        specifier: 1.0.727089
+        version: 1.0.727089
+
+packages:
+
+  chrome-devtools-frontend@1.0.727089:
+    resolution: {integrity: sha512-+dK4dgS3Phib4SPAaF29Vn5NxoKCnyuDNh9IRxjGk+u4P09o3IQyvQKA+43zTtV2q+HmORLJUS6F1SXqfUSpfQ==}
+
+snapshots:
+
+  chrome-devtools-frontend@1.0.727089: {}
