@@ -4,7 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "node src/server/index"
+    "test": "echo \"test\" && exit 0",
+    "serve": "node src/server/index",
+    "prepare": "husky",
+    "lint:lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*": [
+      "pnpm run test"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -12,5 +20,9 @@
   "dependencies": {
     "chrome-devtools-frontend": "1.0.727089",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8"
   }
 }
