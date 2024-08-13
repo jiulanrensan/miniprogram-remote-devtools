@@ -10,8 +10,9 @@
     "lint:lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*": [
-      "pnpm run test"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "keywords": [],
