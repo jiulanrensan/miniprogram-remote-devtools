@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "lib": ["esnext", "dom"],
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "types": []
+  },
+  "include": ["src/**/*"]
+}
