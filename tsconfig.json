@@ -6,13 +6,18 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "allowSyntheticDefaultImports": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "esModuleInterop":true,
+    "strict": true,
     "lib": ["esnext", "dom"],
     "experimentalDecorators": true,
+    "isolatedModules":true,
     "baseUrl": ".",
-    "types": ["@types/node"]
+    "types": ["node", "@types/express"],
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]
