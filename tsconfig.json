@@ -5,10 +5,15 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
+    "allowSyntheticDefaultImports": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop":true,
     "lib": ["esnext", "dom"],
     "experimentalDecorators": true,
     "baseUrl": ".",
-    "types": []
+    "types": ["@types/node"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
 }
