@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdn.bootcdn.net/ajax/libs/vue/3.4.37/vue.esm-browser.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <div>访问列表</div>
+    <button @click="onDevtoolPage">点击跳转</button>
+  </div>
+  <script type="module">
+    import { createApp, ref } from 'vue'
+    
+    createApp({
+      setup() {
+        const message = ref('Hello Vue!')
+        function onDevtoolPage() {
+          const url = `${location.protocol}//${location.host}/devtools_app.html?ws=${location.hostname}:8080`
+          window.location.href = url
+        }
+        return {
+          message,
+          onDevtoolPage
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
