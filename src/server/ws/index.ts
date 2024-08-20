@@ -151,6 +151,7 @@ function initClientServer() {
     ws.on('error', console.error)
     ws.on('close', () => {
       clientSocketMapping.delete(id)
+      devtoolsSocketMapping.delete(id)
       tempDataToDevtools.delete(id)
       console.log('client disconnected')
     })
@@ -187,6 +188,7 @@ function initDevtoolsServer() {
     ws.on('error', console.error)
     ws.on('close', () => {
       devtoolsSocketMapping.delete(id)
+      clientSocketMapping.delete(id)
       tempDataToDevtools.delete(id)
       console.log('devtools disconnected')
     })
