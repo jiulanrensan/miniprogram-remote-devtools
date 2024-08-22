@@ -1,4 +1,3 @@
-import { Domain, Events, Methods } from '@/common/const/domain'
 import { Base } from './base'
 
 /**
@@ -9,7 +8,7 @@ import { Base } from './base'
 export class Console extends Base {
   public enable() {
     this.send({
-      method: [Methods[Domain.Runtime].enable]
+      // method: Methods[Domain.Runtime].enable
     })
   }
   public init() {
@@ -20,7 +19,7 @@ export class Console extends Base {
     console.log = (...args: any[]) => {
       log.apply(console, args)
       this.send({
-        method: Events[Domain.Runtime].consoleAPICalled,
+        method: '',
         params: {
           type: 'log',
           args: [
