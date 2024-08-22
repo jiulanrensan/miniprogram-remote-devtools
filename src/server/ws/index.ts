@@ -6,6 +6,7 @@ import { queryObject, urlPath } from '@/common/url'
 import { Runtime } from '@/common/const/domain/methods/Runtime'
 import { Network } from '@/common/const/domain/methods/Network'
 import { Page } from '@/common/const/domain/methods/Page'
+import { Domain } from '@/common/const/domain/domain'
 /**
  * client <----ws1----> server <----ws2----> devtools
  * 从流程上来说，是client发起连接且发送信息，再由server中转发送到devtools
@@ -14,6 +15,10 @@ import { Page } from '@/common/const/domain/methods/Page'
 
 type WsServer = ReturnType<typeof initDevtoolsServer>
 
+/**
+ * 发送给 client 的 domain协议，目前只支持两个
+ */
+const sendToClientDomain = [Domain.Runtime, Domain.Network]
 const wsRoute = {
   devtools: '/devtools',
   client: '/client'
@@ -192,15 +197,21 @@ function initDevtoolsServer() {
         console.log('terminate: no socketMapping instance')
         return
       }
-      const { bool, id: uid } = isPageGetResourceTree(data)
-      if (bool) {
+      const { id: uid, method } = JSON.parse(data.toString()) as { id: number; method: string }
+      console.log('method', method)
+      if (isPageGetResourceTree(method)) {
         ws.send(JSON.stringify({ id: uid }))
         tempDataToDevtools.changeEnable(true)
         // 初始化之后将缓存的数据发送给devtools
         tempDataToDevtools.send(id, ws)
         return
       }
-      send(client, data)
+      const sendToClient = sendToClientDomain.some((item) => {
+        const [domain] = method.split('.')
+        return item.includes(domain)
+      })
+      // 只允许规定的domain发送给client
+      if (sendToClient) send(client, data)
       // console.log('devtools message', data.toString())
     })
     ws.on('error', console.error)
@@ -243,13 +254,8 @@ function checkSocketValid(request: http.IncomingMessage) {
 /**
  * devtools连接上服务器后，每个 Domain 都会发出消息，调试时发现需要给 Page.getResourceTree 方法回应，devtools 才能展示 console
  */
-function isPageGetResourceTree(data: RawData) {
-  const { id: uid, method } = JSON.parse(data.toString())
-  console.log('method', method)
-  return {
-    bool: method.includes(Page.getResourceTree),
-    id: uid
-  }
+function isPageGetResourceTree(method: string) {
+  return method.includes(Page.getResourceTree)
 }
 
 function send(ws: WebSocket, data: any) {
