@@ -206,7 +206,8 @@ function initDevtoolsServer() {
     ws.on('error', console.error)
     ws.on('close', () => {
       devtoolsSocketMapping.delete(id)
-      clientSocketMapping.delete(id)
+      // devtools断开，不主动关闭client的连接
+      // clientSocketMapping.delete(id)
       tempDataToDevtools.delete(id)
       console.log('devtools disconnected')
     })
