@@ -1,20 +1,15 @@
 import { Base } from './base'
-
+export const originLog = console.log
 /**
  * Runtime
  * consoleAPICalled
  * exceptionThrown
  */
-export class Console extends Base {
-  public enable() {
-    this.send({
-      // method: Methods[Domain.Runtime].enable
-    })
-  }
+export class Runtime extends Base {
   public init() {
-    this.override()
+    this.overrideConsole()
   }
-  private override() {
+  private overrideConsole() {
     const { log } = console
     console.log = (...args: any[]) => {
       log.apply(console, args)
