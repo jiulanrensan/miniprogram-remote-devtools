@@ -1,4 +1,5 @@
 export enum Domain {
   Runtime = 'Runtime',
-  Network = 'Network'
+  Network = 'Network',
+  Page = 'Page'
 }
