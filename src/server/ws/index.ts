@@ -1,8 +1,11 @@
-import { WebSocketServer } from 'ws'
-import type { WebSocket } from 'ws'
+import { WebSocketServer, WebSocket, RawData } from 'ws'
+// import type { WebSocket } from 'ws'
 import http from 'http'
 import type internal from 'stream'
 import { queryObject, urlPath } from '@/common/url'
+import { Runtime } from '@/common/const/domain/methods/Runtime'
+import { Network } from '@/common/const/domain/methods/Network'
+import { Page } from '@/common/const/domain/methods/Page'
 /**
  * client <----ws1----> server <----ws2----> devtools
  * 从流程上来说，是client发起连接且发送信息，再由server中转发送到devtools
@@ -57,7 +60,11 @@ const clientSocketMapping = new ClientSocketMapping()
  * 待向devtools发送的数据
  */
 class DataToDevtools {
+  enable = false
   tempListMap: Map<string, Array<any>> = new Map()
+  changeEnable(bool: boolean) {
+    this.enable = bool
+  }
   init(id: string) {
     if (this.has(id)) return
     this.tempListMap.set(id, [])
@@ -77,7 +84,8 @@ class DataToDevtools {
     this.tempListMap.delete(id)
   }
   send(id: string, ws: WebSocket, data?: any) {
-    const list = tempDataToDevtools.get(id)
+    if (!this.enable) return
+    const list = this.get(id)
     if (!list) {
       if (data) send(ws, data)
       return
@@ -86,7 +94,7 @@ class DataToDevtools {
     dataList.forEach((item) => {
       send(ws, item)
     })
-    tempDataToDevtools.delete(id)
+    this.delete(id)
   }
 }
 const tempDataToDevtools = new DataToDevtools()
@@ -137,13 +145,16 @@ function initClientServer() {
     ws.on('message', (data) => {
       // const path = urlPath(url!)
       const devtools = devtoolsSocketMapping.get(id)
-      if (!devtools) {
+      if (!devtools || !tempDataToDevtools.enable) {
+        // devtools未连接 或 不是可发送状态，暂存消息
         tempDataToDevtools.add(id, data)
       } else {
+        // tempData已经没了，直接发送
         if (!tempDataToDevtools.has(id)) {
           send(devtools, data)
           return
         }
+        // tempData和当前消息一起发送
         tempDataToDevtools.send(id, devtools, data)
       }
       // console.log('client message', data.toString())
@@ -172,7 +183,6 @@ function initDevtoolsServer() {
       return
     }
     devtoolsSocketMapping.init(id, ws)
-    // 初始化之后将缓存的数据发送给devtools
     tempDataToDevtools.send(id, ws)
     ws.on('message', (data) => {
       const client = clientSocketMapping.get(id)
@@ -180,6 +190,14 @@ function initDevtoolsServer() {
         // 如果没有说明已经中断
         ws.terminate()
         console.log('terminate: no socketMapping instance')
+        return
+      }
+      const { bool, id: uid } = isPageGetResourceTree(data)
+      if (bool) {
+        ws.send(JSON.stringify({ id: uid }))
+        tempDataToDevtools.changeEnable(true)
+        // 初始化之后将缓存的数据发送给devtools
+        tempDataToDevtools.send(id, ws)
         return
       }
       send(client, data)
@@ -219,6 +237,18 @@ function checkSocketValid(request: http.IncomingMessage) {
     return false
   }
   return true
+}
+
+/**
+ * devtools连接上服务器后，每个 Domain 都会发出消息，调试时发现需要给 Page.getResourceTree 方法回应，devtools 才能展示 console
+ */
+function isPageGetResourceTree(data: RawData) {
+  const { id: uid, method } = JSON.parse(data.toString())
+  console.log('method', method)
+  return {
+    bool: method.includes(Page.getResourceTree),
+    id: uid
+  }
 }
 
 function send(ws: WebSocket, data: any) {
