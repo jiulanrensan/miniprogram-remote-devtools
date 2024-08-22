@@ -1,5 +1,6 @@
 // app.ts
 const {log} = console
+// "Page.getResourceTree"
 App<IAppOption>({
   globalData: {},
   onLaunch() {
@@ -23,29 +24,13 @@ function connect() {
   socketTask.onMessage((res) => {
     // const data = JSON.parse(res)
     log('onMessage', res);
-    const { data } = res
-    const { id, method } = JSON.parse(data as string)
-    if (method === 'Runtime.enable') {
-      // contextId = id
-      // socketTask.send({
-      //   data: JSON.stringify({
-      //     method: 'Runtime.executionContextCreated',
-      //     params: {
-      //       context: {
-      //         id,
-      //         origin: 'http://localhost:3000/',
-      //         name: 'top',
-      //         auxData: {}
-      //       }
-      //     }
-      //   })
-      // })
-    }
-    socketTask.send({ 
-      data: JSON.stringify({
-        id
-      })
-     })
+    // const { data } = res
+    // const { id, method } = JSON.parse(data as string)
+    // socketTask.send({ 
+    //   data: JSON.stringify({
+    //     id
+    //   })
+    // })
   })
   setTimeout(() => {
     console.log(111)
