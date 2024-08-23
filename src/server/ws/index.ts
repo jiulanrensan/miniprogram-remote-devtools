@@ -146,6 +146,12 @@ function initClientServer() {
     const { url } = request
     console.log('client connected', url)
     const { id } = queryObject(url!)
+    if (clientSocketMapping.has(id)) {
+      // 已经连过的，不允许再连
+      ws.terminate()
+      console.log('terminate: client socket is connected')
+      return
+    }
     clientSocketMapping.init(id, ws)
     ws.on('message', (data) => {
       // const path = urlPath(url!)
