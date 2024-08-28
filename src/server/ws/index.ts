@@ -65,13 +65,17 @@ const clientSocketMapping = new ClientSocketMapping()
  * 待向devtools发送的数据
  */
 class DataToDevtools {
-  enable = false
+  enableMap: Map<string, boolean> = new Map()
   tempListMap: Map<string, Array<any>> = new Map()
-  changeEnable(bool: boolean) {
-    this.enable = bool
+  changeEnable(id: string, bool: boolean) {
+    this.enableMap.set(id, bool)
+  }
+  canSend(id: string) {
+    return this.enableMap.get(id)
   }
   init(id: string) {
     if (this.has(id)) return
+    this.enableMap.set(id, false)
     this.tempListMap.set(id, [])
   }
   get(id: string) {
@@ -86,10 +90,11 @@ class DataToDevtools {
     this.tempListMap.set(id, [...(list || []), data])
   }
   delete(id: string) {
+    this.enableMap.delete(id)
     this.tempListMap.delete(id)
   }
   send(id: string, ws: WebSocket, data?: any) {
-    if (!this.enable) return
+    if (!this.canSend(id)) return
     const list = this.get(id)
     if (!list) {
       if (data) send(ws, data)
@@ -156,7 +161,7 @@ function initClientServer() {
     ws.on('message', (data) => {
       // const path = urlPath(url!)
       const devtools = devtoolsSocketMapping.get(id)
-      if (!devtools || !tempDataToDevtools.enable) {
+      if (!devtools || !tempDataToDevtools.canSend(id)) {
         // devtools未连接 或 不是可发送状态，暂存消息
         tempDataToDevtools.add(id, data)
       } else {
@@ -207,7 +212,7 @@ function initDevtoolsServer() {
       console.log('method', method)
       if (isPageGetResourceTree(method)) {
         ws.send(JSON.stringify({ id: uid }))
-        tempDataToDevtools.changeEnable(true)
+        tempDataToDevtools.changeEnable(id, true)
         // 初始化之后将缓存的数据发送给devtools
         tempDataToDevtools.send(id, ws)
         return
