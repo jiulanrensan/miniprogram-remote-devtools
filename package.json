@@ -11,7 +11,7 @@
     "prepare": "husky",
     "lint:lint-staged": "lint-staged",
     "sdk-clean": "rimraf -rf sdk/",
-    "sdk-build": "pnpm run sdk-clean && rollup --config src/sdk/rollup.config.js"
+    "sdk-build": "pnpm run sdk-clean && rollup --config src/remote-sdk/rollup.config.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
