@@ -1,8 +1,10 @@
+import { ClientSocket } from '../clientSocket'
+
 export type BaseOptions = {
-  socket: WechatMiniprogram.SocketTask
+  socket: ClientSocket
 }
 export class Base {
-  public socket: WechatMiniprogram.SocketTask
+  public socket: ClientSocket
   constructor(options: BaseOptions) {
     const { socket } = options
     this.socket = socket
@@ -12,8 +14,6 @@ export class Base {
   public init() {}
   public enable() {}
   public send(data: any) {
-    this.socket.send({
-      data: JSON.stringify(data)
-    })
+    this.socket.send(JSON.stringify(data))
   }
 }
