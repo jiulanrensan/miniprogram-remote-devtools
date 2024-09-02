@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
     "outDir": "./dist",
     "sourceMap": true,
     "noImplicitAny": false,
@@ -14,7 +14,7 @@
     "experimentalDecorators": true,
     "isolatedModules":true,
     "baseUrl": ".",
-    "types": ["node", "@types/express", "miniprogram-api-typings"],
+    "types": ["node", "@types/express"],
     "paths": {
       "@/*": ["src/*"]
     }
