@@ -19,6 +19,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "packages/common", "packages/remote-sdk", "packages/server"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }

@@ -2,11 +2,11 @@ import { WebSocketServer, WebSocket, RawData } from 'ws'
 // import type { WebSocket } from 'ws'
 import http from 'http'
 import type internal from 'stream'
-import { queryObject, urlPath } from '@/common/url'
-import { Runtime } from '@/common/const/domain/methods/Runtime'
-import { Network } from '@/common/const/domain/methods/Network'
-import { Page } from '@/common/const/domain/methods/Page'
-import { Domain } from '@/common/const/domain/domain'
+import { queryObject, urlPath } from 'packages/common/url'
+import { Runtime } from 'packages/common/const/domain/methods/Runtime'
+import { Network } from 'packages/common/const/domain/methods/Network'
+import { Page } from 'packages/common/const/domain/methods/Page'
+import { Domain } from 'packages/common/const/domain/domain'
 /**
  * client <----ws1----> server <----ws2----> devtools
  * 从流程上来说，是client发起连接且发送信息，再由server中转发送到devtools

@@ -1,7 +1,7 @@
-import { Domain } from '@/common/const/domain/domain'
+import { Domain } from 'packages/common/const/domain/domain'
 import { consoleAPICalledTypeMap, debug, error, info, log, trace, warn } from './api'
-import { Runtime } from '@/common/const/domain/events/Runtime'
-import { overrideApi } from '@/common/utils'
+import { Runtime } from 'packages/common/const/domain/events/Runtime'
+import { overrideApi } from 'packages/common/utils'
 
 export function overrideConsole(send: any) {
   ;[log, info, warn, error, debug, trace].forEach((fn) => {
