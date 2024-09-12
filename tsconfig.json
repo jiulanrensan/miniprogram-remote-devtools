@@ -19,6 +19,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "packages/common", "packages/remote-sdk", "packages/server"],
+  "include": ["src/**/*", "packages/common", "packages/wechat-remote-sdk", "packages/server"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }

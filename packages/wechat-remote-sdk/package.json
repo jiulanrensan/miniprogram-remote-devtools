@@ -1,5 +1,5 @@
 {
-  "name": "@miniprogram-remote-devtools/remote-sdk",
+  "name": "@miniprogram-remote-devtools/wechat-remote-sdk",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
