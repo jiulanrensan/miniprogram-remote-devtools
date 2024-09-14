@@ -8,6 +8,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "dependencies": {
   }
 }

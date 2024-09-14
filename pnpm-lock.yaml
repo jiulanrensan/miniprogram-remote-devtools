@@ -86,7 +86,11 @@ importers:
 
   packages/frontend: {}
 
-  packages/server: {}
+  packages/server:
+    dependencies:
+      '@miniprogram-remote-devtools/common':
+        specifier: workspace:*
+        version: link:../common
 
   packages/wechat-remote-sdk: {}
 

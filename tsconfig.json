@@ -15,6 +15,5 @@
     "isolatedModules":true,
     "baseUrl": ".",
   },
-  "include": ["packages/**/*"],
   "exclude": ["node_modules", "example","**/*.test.ts"]
 }
