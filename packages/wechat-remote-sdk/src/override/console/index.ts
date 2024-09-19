@@ -1,10 +1,10 @@
-import { Domain } from 'packages/common/src/const/cdp/domain'
-import { consoleAPICalledTypeMap, debug, error, info, log, trace, warn } from './api'
-import { Runtime } from 'packages/common/src/const/domain/events/Runtime'
-import { overrideApi } from 'packages/common/src/utils'
+import { Domain } from '@miniprogram-remote-devtools/common'
+import { consoleAPICalledTypeMap, debug, error, info, log, warn } from './api'
+import { Runtime } from '@miniprogram-remote-devtools/common'
+import { overrideApi } from '@miniprogram-remote-devtools/common'
 
 export function overrideConsole(send: any) {
-  ;[log, info, warn, error, debug, trace].forEach((fn) => {
+  ;[log, info, warn, error, debug].forEach((fn) => {
     function overrideFunc(...args) {
       send({
         method: Domain[Runtime.consoleAPICalled],

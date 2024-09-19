@@ -1,86 +1,15 @@
-const {
-  log,
-  info,
-  warn,
-  error,
-  debug,
-  trace,
-  dir,
-  dirxml,
-  table,
-  group,
-  groupCollapsed,
-  groupEnd,
-  time,
-  timeLog,
-  timeEnd,
-  assert,
-  clear,
-  timeStamp, // 非标准
-  count,
-  countReset // 没有输出
-} = console
-export {
-  log,
-  info,
-  warn,
-  error,
-  debug,
-  trace,
-  dir,
-  dirxml,
-  table,
-  group,
-  groupCollapsed,
-  groupEnd,
-  time,
-  timeLog,
-  timeEnd,
-  assert,
-  clear,
-  timeStamp, // 非标准
-  count,
-  countReset // 没有输出
-}
-export const overrideApiList = [
-  log,
-  info,
-  warn,
-  error,
-  debug,
-  trace,
-  dir,
-  dirxml,
-  table,
-  group,
-  groupCollapsed,
-  groupEnd,
-  time,
-  timeLog,
-  timeEnd,
-  assert,
-  clear
-  // 暂不实现
-  // count,
-  // timeStamp,
-  // countReset
-]
+/**
+ * wechat-miniprogram type 只有这几种api
+ */
+const { log, info, warn, error, debug, group, groupEnd } = console
+export { log, info, warn, error, debug, group, groupEnd }
+export const overrideApiList = [log, info, warn, error, debug, group, groupEnd]
 export const consoleAPICalledTypeMap = new Map([
   [log, 'log'],
-  [timeLog, 'log'],
   [debug, 'debug'],
   [info, 'info'],
   [error, 'error'],
   [warn, 'warning'],
-  [dir, 'dir'],
-  [dirxml, 'dirxml'],
-  [table, 'table'],
-  [trace, 'trace'],
-  [clear, 'clear'],
   [group, 'startGroup'],
-  [groupCollapsed, 'startGroupCollapsed'],
-  [groupEnd, 'endGroup'],
-  [assert, 'assert'],
-  [count, 'count'],
-  [timeEnd, 'timeEnd']
+  [groupEnd, 'endGroup']
 ])
