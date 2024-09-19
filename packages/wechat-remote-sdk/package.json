@@ -9,5 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@miniprogram-remote-devtools/common": "workspace:*"
   }
 }

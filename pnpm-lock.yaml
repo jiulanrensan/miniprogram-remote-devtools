@@ -92,7 +92,11 @@ importers:
         specifier: workspace:*
         version: link:../common
 
-  packages/wechat-remote-sdk: {}
+  packages/wechat-remote-sdk:
+    dependencies:
+      '@miniprogram-remote-devtools/common':
+        specifier: workspace:*
+        version: link:../common
 
 packages:
 
