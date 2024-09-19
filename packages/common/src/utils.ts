@@ -1,3 +1,5 @@
+import { AnyFunction } from './type'
+
 export function overrideApi({
   target,
   apiKey,

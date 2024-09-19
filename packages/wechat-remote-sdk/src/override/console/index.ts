@@ -7,7 +7,7 @@ export function overrideConsole(send: any) {
   ;[log, info, warn, error, debug].forEach((fn) => {
     function overrideFunc(...args) {
       send({
-        method: Domain[Runtime.consoleAPICalled],
+        method: Domain[Runtime.events.consoleAPICalled],
         params: {
           type: consoleAPICalledTypeMap.get(fn),
           args: handleArgs(args),

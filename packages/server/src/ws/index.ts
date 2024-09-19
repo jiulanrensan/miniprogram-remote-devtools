@@ -266,7 +266,7 @@ function checkSocketValid(request: http.IncomingMessage) {
  * devtools连接上服务器后，每个 Domain 都会发出消息，调试时发现需要给 Page.getResourceTree 方法回应，devtools 才能展示 console
  */
 function isPageGetResourceTree(method: string) {
-  return method.includes(Page.getResourceTree)
+  return method.includes(Page.method.getResourceTree)
 }
 
 function send(ws: WebSocket, data: any) {
