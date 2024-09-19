@@ -1,4 +1,4 @@
-// import dts from "rollup-plugin-dts";
+import dts from "rollup-plugin-dts";
 import typescript from "rollup-plugin-typescript2";
 export default [
   {
@@ -14,6 +14,14 @@ export default [
       }),
     ],
   },
+  {
+    input: "packages/common/src/index.ts",
+    output: {
+      file: "packages/common/dist/index.d.ts",
+      format: "es",
+    },
+    plugins: [dts()]
+  }
   // {
   //   input: "src/wechat-remote-sdk/index.ts",
   //   output: {
