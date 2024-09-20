@@ -28,4 +28,5 @@ module.exports = {
   },
   // extends: 'eslint:recommended',
   rules: {},
+  ignores: ['sdk', 'node_modules', 'miniprogram_npm/**/**']
 }

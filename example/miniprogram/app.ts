@@ -1,10 +1,23 @@
+import MiniprogramRemoteDevtoolSDK from "@miniprogram-remote-devtools/wechat-remote-sdk"
+// import MiniprogramRemoteDevtoolSDK from "./sdk/index.js"
+
 // app.ts
 const {log} = console
 // "Page.getResourceTree"
 App<IAppOption>({
   globalData: {},
   onLaunch() {
-    connect()
+    const sdk = new MiniprogramRemoteDevtoolSDK()
+    sdk.init({
+      url: 'ws://localhost:3000/client?id=111',
+      timeout: 15000,
+    })
+    setTimeout(() => {
+      console.log(111)
+      console.log(222)
+      console.log(333)
+    }, 10000);
+    // connect()
   },
   
 })

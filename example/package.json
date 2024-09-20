@@ -2,12 +2,15 @@
   "name": "miniprogram-ts-less-quickstart",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
   },
   "keywords": [],
   "author": "",
   "license": "",
   "dependencies": {
+    "@miniprogram-remote-devtools/wechat-remote-sdk": "file:../packages/wechat-remote-sdk",
+    "@miniprogram-remote-devtools/common": "file:../packages/common"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1"
