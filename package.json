@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"test\" && exit 0",
-    "serve": "node src/server/index",
-    "watch": "tsx watch src/server/index.ts",
+    "serve": "node packages/server/src/index",
+    "watch": "tsx watch packages/server/src/index.ts",
     "prepare": "husky",
     "lint:lint-staged": "lint-staged",
     "sdk-clean": "rimraf -rf packages/wechat-remote-sdk/dist/",

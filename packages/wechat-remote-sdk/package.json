@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "scripts": {},
   "keywords": [],
@@ -12,6 +13,6 @@
     ".": "./dist/index.js"
   },
   "dependencies": {
-    "@miniprogram-remote-devtools/common": "workspace:*"
+    "@miniprogram-remote-devtools/common": "workspace:^1.0.0"
   }
 }
