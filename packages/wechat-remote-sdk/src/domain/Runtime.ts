@@ -9,6 +9,7 @@ export const originLog = console.log
  */
 export class Runtime extends Base {
   public init() {
-    overrideConsole(this.send)
+    // 绑定this
+    overrideConsole(this.send.bind(this))
   }
 }
