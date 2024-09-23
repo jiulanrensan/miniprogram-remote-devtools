@@ -26,8 +26,11 @@ export class ClientSocket {
     this.socket.onError((errMsg) => {
       console.log('socket errMsg', errMsg)
     })
-    this.socket.onOpen((res) => {
+    this.socket.onOpen(() => {
       console.log('socket onOpen')
+      wx.showToast({
+        title: '调试已连接'
+      })
     })
   }
   send(data: string) {
