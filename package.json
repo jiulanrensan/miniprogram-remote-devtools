@@ -5,15 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"test\" && exit 0",
+    "test": "cross-env NODE_ENV=development node ./rollup.config.js",
     "serve": "node packages/server/src/index",
     "watch": "tsx watch packages/server/src/index.ts",
     "prepare": "husky",
     "lint:lint-staged": "lint-staged",
     "sdk-clean": "rimraf -rf packages/wechat-remote-sdk/dist/",
-    "sdk-build": "pnpm run sdk-clean && rollup --config rollup.config.js",
-    "common-clean": "rimraf -rf packages/common/dist/",
-    "common-build": "pnpm run common-clean && rollup --config rollup.config.js"
+    "sdk-build": "pnpm run sdk-clean && cross-env NODE_ENV=production rollup --config rollup.config.js",
+    "sdk-watch": "pnpm run sdk-clean && cross-env NODE_ENV=development rollup --config rollup.config.js --watch"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -38,6 +37,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^22.2.0",
     "@types/wechat-miniprogram": "^3.4.7",
+    "cross-env": "^7.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.9.0",
