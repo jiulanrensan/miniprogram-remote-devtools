@@ -12,7 +12,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ['dist', 'sdk', 'node_modules', 'commitlint.config.js', 'example', 'rollup.config.js'],
+    ignores: ['dist', 'node_modules', 'commitlint.config.js', 'example', 'rollup.config.js'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'off'
