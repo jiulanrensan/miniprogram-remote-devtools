@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "cross-env NODE_ENV=development node ./rollup.config.js",
-    "serve": "node packages/server/src/index",
-    "watch": "tsx watch packages/server/src/index.ts",
+    "server": "node packages/server/src/index",
+    "server-watch": "tsx watch packages/server/src/index.ts",
     "prepare": "husky",
     "lint:lint-staged": "lint-staged",
     "sdk-clean": "rimraf -rf packages/wechat-remote-sdk/dist/",
