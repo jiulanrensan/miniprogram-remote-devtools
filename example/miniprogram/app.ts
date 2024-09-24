@@ -13,9 +13,11 @@ App<IAppOption>({
       timeout: 15000,
     })
     setTimeout(() => {
+      console.group()
       console.log(111)
       console.log(222)
       console.log(333)
+      console.groupEnd()
     }, 10000);
     // connect()
   },
