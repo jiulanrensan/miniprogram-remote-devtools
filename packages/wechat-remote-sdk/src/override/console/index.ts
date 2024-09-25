@@ -1,7 +1,14 @@
-import { AnyFunction, Domain, getValueType } from '@miniprogram-remote-devtools/common'
+import {
+  AnyFunction,
+  dataType,
+  Domain,
+  getValueType,
+  lowerDataType
+} from '@miniprogram-remote-devtools/common'
 import { consoleAPICalledTypeMap, debug, error, group, groupEnd, info, log, warn } from './api'
 import { Runtime } from '@miniprogram-remote-devtools/common'
 import { overrideApi } from '@miniprogram-remote-devtools/common'
+import { handleObjectArg } from './objectArgs'
 
 type Args = Array<any>
 
@@ -60,60 +67,54 @@ function handleNoArgsConsoleGroup(funcName: string) {
 }
 
 const handleArgsMap = {
-  string: (arg: string) => {
+  [lowerDataType.string]: (arg) => {
     return {
-      type: 'string',
+      type: lowerDataType.string,
       value: arg
     }
   },
 
-  number: (arg: number) => {
+  [lowerDataType.number]: (arg) => {
     return {
-      type: 'number',
+      type: lowerDataType.number,
       value: arg,
       description: String(arg)
     }
   },
 
-  boolean: (arg: boolean) => {
+  [lowerDataType.boolean]: (arg) => {
     return {
-      type: 'boolean',
+      type: lowerDataType.boolean,
       value: arg
     }
   },
 
-  undefined: () => {
+  [lowerDataType.undefined]: () => {
     return {
       type: 'undefined'
     }
   },
   // 微信小程序暂不支持
-  bigInt: (arg: bigint) => {
+  [lowerDataType.bigint]: (arg) => {
     const v = `${arg.toString()}n`
     return {
-      type: 'bigint',
+      type: lowerDataType.bigint,
       unserializableValue: v,
       description: v
     }
   },
-  symbol: (arg: symbol) => {
+  [lowerDataType.symbol]: (arg) => {
     return {
-      type: 'symbol',
+      type: lowerDataType.symbol,
       description: arg.toString()
     }
   },
-  function: (arg: AnyFunction) => {
+  [lowerDataType.function]: (arg) => {
     return {
-      type: 'function',
+      type: lowerDataType.function,
       className: getValueType(arg),
       description: arg.toString()
     }
   },
-  object: (arg: object) => {
-    return {
-      type: 'object',
-      className: getValueType(arg),
-      description: JSON.stringify(arg)
-    }
-  }
+  [lowerDataType.object]: handleObjectArg
 }

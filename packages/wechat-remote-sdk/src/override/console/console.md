@@ -284,3 +284,253 @@
 }
 ```
 
+### Object
+`console.log({ a:1 })`
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "className": "Object",
+      "description": "Object",
+      "objectId": "-5766465894328255664.26.26670",
+      "preview": {
+        "type": "object",
+        "description": "Object",
+        "overflow": false,
+        "properties": [
+          {
+            "name": "a",
+            "type": "number",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  ],
+  "executionContextId": 26,
+  "timestamp": 1727247813736.43,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "1570",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
+
+`console.log({a: { b: 1 } })`
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "className": "Object",
+      "description": "Object",
+      "objectId": "-5766465894328255664.26.26684",
+      "preview": {
+        "type": "object",
+        "description": "Object",
+        "overflow": false,
+        "properties": [
+          {
+            "name": "a",
+            "type": "object",
+            "value": "Object"
+          }
+        ]
+      }
+    }
+  ],
+  "executionContextId": 26,
+  "timestamp": 1727249144819.304,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "1582",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
+
+### Array
+`console.log([1,2,3])`
+
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "subtype": "array",
+      "className": "Array",
+      "description": "Array(3)",
+      "objectId": "-5766465894328255664.26.10102",
+      "preview": {
+        "type": "object",
+        "subtype": "array",
+        "description": "Array(3)",
+        "overflow": false,
+        "properties": [
+          {
+            "name": "0",
+            "type": "number",
+            "value": "1"
+          },
+          {
+            "name": "1",
+            "type": "number",
+            "value": "2"
+          },
+          {
+            "name": "2",
+            "type": "number",
+            "value": "3"
+          }
+        ]
+      }
+    }
+  ],
+  "executionContextId": 26,
+  "timestamp": 1727245424734.536,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "753",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
+### Date
+`console.log(new Date())`
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "subtype": "date",
+      "className": "Date",
+      "description": "Wed Sep 25 2024 14:40:56 GMT+0800 (中国标准时间)",
+      "objectId": "-5766465894328255664.26.13432",
+      "preview": {
+        "type": "object",
+        "subtype": "date",
+        "description": "Wed Sep 25 2024 14:40:56 GMT+0800 (中国标准时间)",
+        "overflow": false,
+        "properties": []
+      }
+    }
+  ],
+  "executionContextId": 26,
+  "timestamp": 1727246467231.915,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "943",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
+
+### Map
+```js
+const map = new Map()
+map.set(1, 1)
+map.set(2,2)
+console.log(map)
+```
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "subtype": "map",
+      "className": "Map",
+      "description": "Map(2)",
+      "objectId": "-5766465894328255664.26.25516",
+      "preview": {
+        "type": "object",
+        "subtype": "map",
+        "description": "Map(2)",
+        "overflow": false,
+        "properties": [
+          {
+            "name": "size",
+            "type": "number",
+            "value": "2"
+          }
+        ],
+        "entries": [
+          {
+            "key": {
+              "type": "number",
+              "description": "1",
+              "overflow": false,
+              "properties": []
+            },
+            "value": {
+              "type": "number",
+              "description": "1",
+              "overflow": false,
+              "properties": []
+            }
+          },
+          {
+            "key": {
+              "type": "number",
+              "description": "2",
+              "overflow": false,
+              "properties": []
+            },
+            "value": {
+              "type": "number",
+              "description": "2",
+              "overflow": false,
+              "properties": []
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "executionContextId": 26,
+  "timestamp": 1727247218812.731,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "1477",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
+
+
