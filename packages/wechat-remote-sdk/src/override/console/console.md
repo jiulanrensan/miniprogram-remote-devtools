@@ -84,35 +84,6 @@
   }
 }
 ```
-
-## Null
-`console.log(null)`
-```json
-{
-  "type": "log",
-  "args": [
-    {
-      "type": "object",
-      "subtype": "null",
-      "value": null
-    }
-  ],
-  "executionContextId": 27,
-  "timestamp": 1727168118067.884,
-  "stackTrace": {
-    "callFrames": [
-      {
-        "functionName": "",
-        "scriptId": "860",
-        "url": "",
-        "lineNumber": 0,
-        "columnNumber": 8
-      }
-    ]
-  }
-}
-```
-
 ## undefined
 `console.log(undefined)`
 ```json
@@ -148,7 +119,7 @@
   "args": [
     {
       "type": "bigint",
-      "unserializableValue": "1n", // valueOf()
+      "unserializableValue": "1n", // toString() + n
       "description": "1n"
     }
   ],
@@ -204,7 +175,7 @@
   "args": [
     {
       "type": "symbol",
-      "description": "Symbol(1)", // valueOf()
+      "description": "Symbol(1)", // toString()
       "objectId": "-732749256386253889.27.11323"
     }
   ],
@@ -234,7 +205,7 @@
     {
       "type": "function",
       "className": "Function",
-      "description": "function aa() {console.log(111111)}", // valueOf()
+      "description": "function aa() {console.log(111111)}", // toString()
       "objectId": "-732749256386253889.27.30068"
     }
   ],
@@ -285,4 +256,31 @@
 ```
 
 ## Object
+### Null
+`console.log(null)`
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "subtype": "null",
+      "value": null
+    }
+  ],
+  "executionContextId": 27,
+  "timestamp": 1727168118067.884,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "860",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
 
