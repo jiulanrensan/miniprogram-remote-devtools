@@ -13,12 +13,18 @@ App<IAppOption>({
       timeout: 15000,
     })
     setTimeout(() => {
-      console.group()
-      console.log(111)
-      console.log(222)
-      console.log(333)
-      console.groupEnd()
-    }, 10000);
+      console.log('hello world')
+      console.log(123)
+      console.log(true)
+      console.log(Symbol(12))
+      console.log(void 0)
+      console.log(function aa(){return 1});
+      console.log(async function aa(){return 2});
+      console.log(null)
+      console.log({a: 1})
+      console.log({ a:{b:1} })
+      
+    }, 1000);
     // connect()
   },
   
