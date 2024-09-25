@@ -1,4 +1,5 @@
-import { AnyFunction } from './type'
+import { AnyFunction } from '../type'
+export * from './type'
 
 export function overrideApi({
   target,
