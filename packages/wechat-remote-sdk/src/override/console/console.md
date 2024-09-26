@@ -294,7 +294,7 @@
       "type": "object",
       "className": "Object",
       "description": "Object",
-      "objectId": "-5766465894328255664.26.26670",
+      "objectId": "-5766465894328255664.26.41906",
       "preview": {
         "type": "object",
         "description": "Object",
@@ -325,6 +325,49 @@
 }
 ```
 
+`Runtime.getProperties`
+request
+```json
+{
+  // id对应某一层级，这个层级下有key: a
+  "objectId": "-5766465894328255664.26.41906",
+  "ownProperties": true,
+  "accessorPropertiesOnly": false,
+  "nonIndexedPropertiesOnly": false,
+  "generatePreview": true
+}
+```
+response
+```json
+{
+  "result": [
+    {
+      "name": "a",
+      "value": {
+        "type": "number",
+        "value": 1,
+        "description": "1"
+      },
+      "writable": true,
+      "configurable": true,
+      "enumerable": true,
+      "isOwn": true
+    }
+  ],
+  "internalProperties": [
+    {
+      "name": "[[Prototype]]",
+      "value": {
+        "type": "object",
+        "className": "Object",
+        "description": "Object",
+        "objectId": "-5766465894328255664.26.41909"
+      }
+    }
+  ]
+}
+```
+
 `console.log({a: { b: 1 } })`
 ```json
 {
@@ -334,7 +377,7 @@
       "type": "object",
       "className": "Object",
       "description": "Object",
-      "objectId": "-5766465894328255664.26.26684",
+      "objectId": "-5766465894328255664.26.41926",
       "preview": {
         "type": "object",
         "description": "Object",
@@ -364,6 +407,189 @@
   }
 }
 ```
+
+`Runtime.getProperties`
+request
+```json
+{
+  // id对应某一层级，这个层级下有key: a
+  "objectId": "-5766465894328255664.26.41926",
+  "ownProperties": true,
+  "accessorPropertiesOnly": false,
+  "nonIndexedPropertiesOnly": false,
+  "generatePreview": true
+}
+```
+response
+```json
+{
+  "result": [
+    {
+      "name": "a",
+      "value": {
+        "type": "object",
+        "className": "Object",
+        "description": "Object",
+        "objectId": "-5766465894328255664.26.41929",
+        "preview": {
+          "type": "object",
+          "description": "Object",
+          "overflow": false,
+          "properties": [
+            {
+              "name": "b",
+              "type": "number",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "writable": true,
+      "configurable": true,
+      "enumerable": true,
+      "isOwn": true
+    }
+  ],
+  "internalProperties": [
+    {
+      "name": "[[Prototype]]",
+      "value": {
+        "type": "object",
+        "className": "Object",
+        "description": "Object",
+        "objectId": "-5766465894328255664.26.41930"
+      }
+    }
+  ]
+}
+```
+
+`console.log({a: {b: 1}, c: {d: 2}})`
+```json
+{
+  "type": "log",
+  "args": [
+    {
+      "type": "object",
+      "className": "Object",
+      "description": "Object",
+      "objectId": "-5766465894328255664.26.41973",
+      "preview": {
+        "type": "object",
+        "description": "Object",
+        "overflow": false,
+        "properties": [
+          {
+            "name": "a",
+            "type": "object",
+            "value": "Object"
+          },
+          {
+            "name": "c",
+            "type": "object",
+            "value": "Object"
+          }
+        ]
+      }
+    }
+  ],
+  "executionContextId": 26,
+  "timestamp": 1727320318412.088,
+  "stackTrace": {
+    "callFrames": [
+      {
+        "functionName": "",
+        "scriptId": "2154",
+        "url": "",
+        "lineNumber": 0,
+        "columnNumber": 8
+      }
+    ]
+  }
+}
+```
+
+`Runtime.getProperties`
+request
+```json
+{
+  // id对应某一层级，这个层级下有key: a,c
+  "objectId": "-5766465894328255664.26.41973",
+  "ownProperties": true,
+  "accessorPropertiesOnly": false,
+  "nonIndexedPropertiesOnly": false,
+  "generatePreview": true
+}
+```
+response
+```json
+{
+  "result": [
+    {
+      "name": "a",
+      "value": {
+        "type": "object",
+        "className": "Object",
+        "description": "Object",
+        "objectId": "-5766465894328255664.26.41976",
+        "preview": {
+          "type": "object",
+          "description": "Object",
+          "overflow": false,
+          "properties": [
+            {
+              "name": "b",
+              "type": "number",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "writable": true,
+      "configurable": true,
+      "enumerable": true,
+      "isOwn": true
+    },
+    {
+      "name": "c",
+      "value": {
+        "type": "object",
+        "className": "Object",
+        "description": "Object",
+        "objectId": "-5766465894328255664.26.41977",
+        "preview": {
+          "type": "object",
+          "description": "Object",
+          "overflow": false,
+          "properties": [
+            {
+              "name": "d",
+              "type": "number",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "writable": true,
+      "configurable": true,
+      "enumerable": true,
+      "isOwn": true
+    }
+  ],
+  "internalProperties": [
+    {
+      "name": "[[Prototype]]",
+      "value": {
+        "type": "object",
+        "className": "Object",
+        "description": "Object",
+        "objectId": "-5766465894328255664.26.41978"
+      }
+    }
+  ]
+}
+```
+
 
 ### Array
 `console.log([1,2,3])`

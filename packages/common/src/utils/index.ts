@@ -20,3 +20,25 @@ export function overrideApi({
     if (order === 'after') overrideFunc(...args)
   }
 }
+
+export function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0
+    const v = c == 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
+export function getObjectValueByPath(obj: object, path: string, defaultValue = void 0) {
+  const keysList = path.split('.')
+  let temp: any = obj
+  for (let i = 0; i < keysList.length; i++) {
+    const key = keysList[i]
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      temp = temp[keysList[i]]
+    } else {
+      temp = defaultValue
+      return temp
+    }
+  }
+}
