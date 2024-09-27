@@ -1,4 +1,4 @@
-import { Domain } from '@miniprogram-remote-devtools/common'
+import { AnyFunction, Domain } from '@miniprogram-remote-devtools/common'
 import { ClientSocket } from '../clientSocket'
 import { originLog } from './Runtime'
 
@@ -6,7 +6,7 @@ export type BaseOptions = {
   socket: ClientSocket
 }
 export class Base {
-  public socket: ClientSocket
+  private socket: ClientSocket
   constructor(options: BaseOptions) {
     const { socket } = options
     this.socket = socket
