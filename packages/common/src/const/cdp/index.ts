@@ -19,6 +19,7 @@ export const Network = {
 
 export const Page = {
   method: {
+    enable: `${Domain.Page}.enable}`,
     getResourceTree: `${Domain.Page}.getResourceTree`
   }
 } as const
