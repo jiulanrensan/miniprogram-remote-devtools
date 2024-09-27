@@ -18,7 +18,7 @@ type WsServer = ReturnType<typeof initDevtoolsServer>
 /**
  * 发送给 client 的 domain协议，目前只支持两个
  */
-const sendToClientDomain = [Domain.Runtime, Domain.Network]
+const sendToClientDomain = [Domain.Runtime, Domain.Network, Domain.Page]
 const wsRoute = {
   devtools: '/devtools',
   client: '/client'
@@ -159,6 +159,7 @@ function initClientServer() {
     }
     clientSocketMapping.init(id, ws)
     ws.on('message', (data) => {
+      // console.log('client message, data', data.toString())
       // const path = urlPath(url!)
       const devtools = devtoolsSocketMapping.get(id)
       if (!devtools || !tempDataToDevtools.canSend(id)) {
@@ -209,7 +210,7 @@ function initDevtoolsServer() {
         return
       }
       const { id: uid, method } = JSON.parse(data.toString()) as { id: number; method: string }
-      console.log('method', method)
+      // console.log('method', method)
       if (isPageGetResourceTree(method)) {
         ws.send(JSON.stringify({ id: uid }))
         tempDataToDevtools.changeEnable(id, true)
@@ -270,5 +271,6 @@ function isPageGetResourceTree(method: string) {
 }
 
 function send(ws: WebSocket, data: any) {
+  // console.log('send', data.toString())
   ws.send(data, { binary: false })
 }
