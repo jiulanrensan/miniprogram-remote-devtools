@@ -26,7 +26,8 @@ export const Page = {
 
 export const Runtime = {
   method: {
-    enable: `${Domain.Runtime}.enable`
+    enable: `${Domain.Runtime}.enable`,
+    getProperties: `${Domain.Runtime}.getProperties`
   },
   events: {
     consoleAPICalled: `${Domain.Runtime}.consoleAPICalled`
