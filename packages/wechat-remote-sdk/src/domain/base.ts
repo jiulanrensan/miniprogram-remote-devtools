@@ -1,32 +1,27 @@
 import { AnyFunction, Domain } from '@miniprogram-remote-devtools/common'
-import { ClientSocket } from '../clientSocket'
+import { CDPCallback, ClientSocket } from '../clientSocket'
 import { originLog } from './Runtime'
 
 export type BaseOptions = {
   socket: ClientSocket
+  domain: Domain
 }
+
 export class Base {
   private socket: ClientSocket
+  private domain: Domain
   constructor(options: BaseOptions) {
-    const { socket } = options
+    const { socket, domain } = options
     this.socket = socket
+    this.domain = domain
+    socket.initSubscribe(domain)
     this.init()
-    this.socket.onMessage((res) => {
-      const info = JSON.parse(res.data as string)
-      if (info && info.method) {
-        this.enable(info)
-      }
-    })
   }
-  public init() {}
-  public enable(info: { id: number; method: string }) {
-    const { id, method } = info
-    const doamins = Object.keys(Domain)
-    if (doamins.some((domain) => `${domain}.enable` === method)) {
-      this.send({ id })
-    }
+  init() {}
+  subscribe(record: Record<string, CDPCallback>) {
+    this.socket.subscribe(this.domain, record)
   }
-  public send(data: any) {
+  send(data: any) {
     this.socket.send(JSON.stringify(data))
   }
 }

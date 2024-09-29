@@ -1,3 +1,4 @@
+import { originLog } from '@/domain/Runtime'
 import {
   getValueType,
   noPropertyDataType,
@@ -24,13 +25,22 @@ import {
 type Option = { arg: object; type: string; subtype: string }
 
 /**
- * object <=> objectId
+ * object <=> objectId 要有绑定关系
  * ----
  * console.log(object)
  * 以console入参的object作为起点，通过uuid记录其地址
- * object里的属性以`uuid.key1.key2.key3...`的形式记录，多一层嵌套就多一个`.key`
+ *
+ * 不同层级的objectId`uuid.key1.key2.key3...`的形式记录，多一层嵌套就多一个`.key`
  */
-const objectIdMap = new Map() as Map<object, string>
+/**
+ * 对象对应的id，同一个引用的对象可能console多次
+ */
+const objectToIdMap = new Map() as Map<object, string>
+
+/**
+ * id对应的对象
+ */
+const idToObjectMap = new Map() as Map<string, object>
 
 function nullArgs({ arg }: { arg: null }) {
   return {
@@ -67,21 +77,45 @@ function objectProperties(arg, key) {
 }
 
 function createObjectId(arg: object): string {
-  if (objectIdMap.has(arg)) {
-    return objectIdMap.get(arg)!
+  if (objectToIdMap.has(arg)) {
+    return objectToIdMap.get(arg)!
   }
   const uuid = generateUUID()
-  objectIdMap.set(arg, uuid)
+  objectToIdMap.set(arg, uuid)
+  idToObjectMap.set(uuid, arg)
   return uuid
+}
+
+/**
+ * objectId会存在'.'分隔
+ */
+export function getObjectById(objectId: string) {
+  const dotIdx = objectId.indexOf('.')
+  let realObjectId = ''
+  let path = ''
+  if (dotIdx === -1) {
+    realObjectId = objectId.slice(0)
+  } else {
+    realObjectId = objectId.slice(0, dotIdx)
+    path = objectId.slice(dotIdx + 1)
+  }
+  const topObject = idToObjectMap.get(realObjectId)
+  if (!topObject) {
+    originLog('对象不存在')
+    return
+  }
+  if (!path) return topObject
+  const target = getObjectValueByPath(topObject, path)
+  return target
 }
 
 // function createObjectPropertyIds(arg: object, path?: string) {
 //   if (getValueType(arg) !== dataType.object) return
 //   let uuid = ''
-//   if (!objectIdMap.has(arg)) {
+//   if (!objectToIdMap.has(arg)) {
 //     uuid = createObjectId(arg)
 //   } else {
-//     uuid = objectIdMap.get(arg)!
+//     uuid = objectToIdMap.get(arg)!
 //   }
 //   if (!path) return uuid
 //    getObjectValueByPath(arg, path)

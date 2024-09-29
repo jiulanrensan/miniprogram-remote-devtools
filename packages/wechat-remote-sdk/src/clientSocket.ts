@@ -7,6 +7,7 @@ export type ClientSocketOptions = {
   url: string
   timeout?: number
 }
+export type CDPCallback = (data: CDPArgs) => void
 const defaultOptions = {
   url: '',
   timeout: 15000
@@ -14,7 +15,7 @@ const defaultOptions = {
 export class ClientSocket {
   connectSocket = wx.connectSocket
   socket: WechatMiniprogram.SocketTask
-  private subscribeMap: Map<string, AnyFunction[]> = new Map()
+  private subscribeMap: Map<string, Record<string, CDPCallback>> = new Map()
   constructor(options: ClientSocketOptions) {
     this.socket = this.connectSocket({
       ...defaultOptions,
@@ -39,7 +40,7 @@ export class ClientSocket {
     this.socket.onMessage((resp: WechatMiniprogram.SocketTaskOnMessageCallbackResult) => {
       const { data } = resp
       const info = JSON.parse(data as string) as CDPArgs
-      this.public(info.method, info)
+      this.public(info)
     })
   }
   send(data: string) {
@@ -55,22 +56,17 @@ export class ClientSocket {
     this.socket.onMessage(callback)
   }
   initSubscribe(domain: Domain) {
-    this.subscribeMap.set(domain, [])
+    this.subscribeMap.set(domain, {})
   }
-  subscribe(domain: Domain, callback: AnyFunction) {
-    let list = this.subscribeMap.get(domain)
-    if (!list) {
-      list = []
-      this.subscribeMap.set(domain, list)
-    }
-    list.push(callback)
+  subscribe(domain: Domain, record: Record<string, CDPCallback>) {
+    this.subscribeMap.set(domain, record)
   }
-  public(domain: Domain, data: any) {
-    const list = this.subscribeMap.get(domain)
-    if (!list) return
-    list.forEach((callback) => {
-      callback(data)
-    })
+  public(data: CDPArgs) {
+    const { method: _method, params, id } = data
+    const [domain] = _method.split('.')
+    const funcRecord = this.subscribeMap.get(domain)
+    if (!funcRecord || !funcRecord[_method]) return
+    funcRecord[_method](data)
   }
   clear() {
     this.subscribeMap.clear()
