@@ -104,7 +104,7 @@ class DataToDevtools {
     dataList.forEach((item) => {
       send(ws, item)
     })
-    this.delete(id)
+    this.tempListMap.delete(id)
   }
 }
 const tempDataToDevtools = new DataToDevtools()
@@ -159,6 +159,7 @@ function initClientServer() {
     }
     clientSocketMapping.init(id, ws)
     ws.on('message', (data) => {
+      // console.log('client message', data.toString())
       // console.log('client message, data', data.toString())
       // const path = urlPath(url!)
       const devtools = devtoolsSocketMapping.get(id)
@@ -174,7 +175,6 @@ function initClientServer() {
         // tempData和当前消息一起发送
         tempDataToDevtools.send(id, devtools, data)
       }
-      // console.log('client message', data.toString())
     })
     ws.on('error', console.error)
     ws.on('close', () => {
