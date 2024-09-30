@@ -1,4 +1,9 @@
-import { Domain, getValueType, Runtime as RuntimeDomain } from '@miniprogram-remote-devtools/common'
+import {
+  Domain,
+  getValueType,
+  noPropertyDataType,
+  Runtime as RuntimeDomain
+} from '@miniprogram-remote-devtools/common'
 import { overrideConsole } from '../override/console'
 import { Base } from './base'
 import { getObjectById } from '@/override/console/objectArgs'
@@ -21,53 +26,59 @@ export class Runtime extends Base {
       [RuntimeDomain.method.getProperties]: ({ id, params }) => {
         // ownProperties 为 false 时会去获取原型链上的属性，现在只处理获取本身属性的场景
         const { objectId, ownProperties } = params as { objectId: string; ownProperties: boolean }
-        if (!ownProperties) return
         const target = getObjectById(objectId)
-        const result = Object.keys(target).map((key) => {
-          const descriptors = Object.getOwnPropertyDescriptor(target, key)
-          return {
-            ...descriptors,
-            name: key,
-            value: {
-              type: getValueType(target[key]).toLocaleLowerCase(),
-              value: target[key],
-              description: String(target[key])
-            },
-            isOwn: true
+        function addValue(options: {
+          target: object
+          key: string
+          objectId: string
+          type: (typeof noPropertyDataType)[number]
+        }) {
+          const { target, key, objectId, type } = options
+          const obj = target[key]
+          const result = {
+            type: type.toLocaleLowerCase(),
+            description: String(obj)
           }
-        })
-        const res = {
-          internalProperties: [
-            {
-              name: '[[Prototype]]',
-              value: {
-                type: 'object',
-                className: 'Object',
-                description: 'Object',
-                objectId: ''
-              }
+          if (noPropertyDataType.includes(type)) {
+            return {
+              ...result,
+              value: obj
             }
-          ],
-          result
+          }
+          return {
+            type: type.toLocaleLowerCase(),
+            description: type,
+            className: type,
+            objectId: `${objectId}.${key}`,
+            preview: {
+              type: type.toLocaleLowerCase(),
+              description: type,
+              overflow: false,
+              properties: Object.keys(obj).map((subKey) => {
+                const subType = getValueType(obj) as (typeof noPropertyDataType)[number]
+                return {
+                  name: subKey,
+                  type: subType.toLocaleLowerCase(),
+                  value: String(obj[subKey])
+                }
+              })
+            }
+          }
         }
-        //
-        super.send({
-          id,
-          result: {
-            result: [
-              {
-                name: 'a',
-                value: {
-                  type: 'number',
-                  value: 1,
-                  description: '1'
-                },
-                writable: true,
-                configurable: true,
-                enumerable: true,
-                isOwn: true
-              }
-            ],
+        const res = {
+          result: Object.keys(target).map((key) => {
+            const descriptors = Object.getOwnPropertyDescriptor(target, key)
+            const type = getValueType(target[key]) as (typeof noPropertyDataType)[number]
+            return {
+              ...descriptors,
+              name: key,
+              value: addValue({ target, key, objectId, type }),
+              isOwn: true
+            }
+          })
+        }
+        if (ownProperties) {
+          Object.assign(res, {
             internalProperties: [
               {
                 name: '[[Prototype]]',
@@ -75,11 +86,15 @@ export class Runtime extends Base {
                   type: 'object',
                   className: 'Object',
                   description: 'Object',
-                  objectId: '-5766465894328255664.26.41909'
+                  objectId: ''
                 }
               }
             ]
-          }
+          })
+        }
+        super.send({
+          id,
+          result: res
         })
       }
     })
