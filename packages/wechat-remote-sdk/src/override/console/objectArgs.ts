@@ -22,7 +22,7 @@ import {
  *  - RegExp
  *  - Date
  */
-type Option = { arg: object; type: string; subtype: string }
+type Option = { arg: any; type: string; subtype: string }
 
 /**
  * object <=> objectId 要有绑定关系
@@ -50,22 +50,48 @@ function nullArgs({ arg }: { arg: null }) {
   }
 }
 
-function objectArgs(options: Option) {
-  const { arg, type, subtype } = options
-  return {
-    type: subtype,
-    className: type,
-    description: type,
-    objectId: createObjectId(arg),
-    preview: {
+const dataTypeFn: Record<string, (option: Option) => any> = {
+  object: (options) => {
+    const { arg, type, subtype } = options
+    return {
       type: subtype,
+      className: type,
       description: type,
-      overflow: false,
-      properties: Object.keys(arg).map((key) => objectProperties(arg, key))
+      objectId: createObjectId(arg),
+      preview: {
+        type: subtype,
+        description: type,
+        overflow: false,
+        properties: Object.keys(arg).map((key) => previewProperties(arg, key))
+      }
+    }
+  },
+  array: (options) => {
+    const { arg, type, subtype } = options
+    const typeLower = type.toLocaleLowerCase()
+    const desc = `${type}(${arg.length})`
+    return {
+      type: typeLower,
+      subtype,
+      className: type,
+      description: desc,
+      objectId: createObjectId(arg),
+      preview: {
+        type: typeLower,
+        subtype,
+        description: desc,
+        overflow: false,
+        properties: Object.keys(arg).map((key) => previewProperties(arg, key))
+      }
     }
   }
 }
-function objectProperties(arg, key) {
+
+function objectArgs(options: Option) {
+  const fn = dataTypeFn[options.type]
+  return fn(options)
+}
+function previewProperties(arg, key) {
   const type = getValueType(arg[key]) as (typeof noPropertyDataType)[number]
   const subtype = type.toLocaleLowerCase()
   const noPro = noPropertyDataType.includes(type)
@@ -124,9 +150,8 @@ export function getObjectById(objectId: string) {
 export function handleObjectArg(arg: object) {
   const type = getValueType(arg) // 'Null'
   const subtype = type.toLocaleLowerCase() // 'null
-  const fn = {
-    null: nullArgs,
-    object: objectArgs
+  if (dataType.null === type) {
+    return nullArgs({ arg: null })
   }
-  return fn[subtype]({ arg, type, subtype })
+  return objectArgs({ arg, type, subtype })
 }

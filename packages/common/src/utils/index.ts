@@ -34,7 +34,7 @@ export function getObjectValueByPath(obj: object, path: string, defaultValue = v
   let temp: any = obj
   for (let i = 0; i < keysList.length; i++) {
     const key = keysList[i]
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+    if (Object.prototype.hasOwnProperty.call(temp, key)) {
       temp = temp[keysList[i]]
     } else {
       temp = defaultValue

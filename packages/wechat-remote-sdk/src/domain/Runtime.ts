@@ -59,7 +59,7 @@ export class Runtime extends Base {
                 return {
                   name: subKey,
                   type: subType.toLocaleLowerCase(),
-                  value: String(obj[subKey])
+                  value: noPropertyDataType.includes(subType) ? String(obj[subKey]) : subType
                 }
               })
             }
