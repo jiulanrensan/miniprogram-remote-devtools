@@ -38,7 +38,8 @@ export function getObjectValueByPath(obj: object, path: string, defaultValue = v
       temp = temp[keysList[i]]
     } else {
       temp = defaultValue
-      return temp
+      break
     }
   }
+  return temp
 }
