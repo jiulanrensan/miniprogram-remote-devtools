@@ -4,7 +4,8 @@ import {
   noPropertyDataType,
   dataType,
   generateUUID,
-  getObjectValueByPath
+  getObjectValueByPath,
+  lowerDataType
 } from '@miniprogram-remote-devtools/common'
 
 /**
@@ -22,7 +23,7 @@ import {
  *  - RegExp
  *  - Date
  */
-type Option = { arg: any; type: string; subtype: string }
+type Option = { arg: any; type: string; typeLower: string }
 
 /**
  * object <=> objectId 要有绑定关系
@@ -52,14 +53,15 @@ function nullArgs({ arg }: { arg: null }) {
 
 const dataTypeFn: Record<string, (option: Option) => any> = {
   object: (options) => {
-    const { arg, type, subtype } = options
+    const { arg, type, typeLower } = options
     return {
-      type: subtype,
+      // 这里的type都要用'object'，subtype才用具体类型，下面preview同理
+      type: lowerDataType.object,
       className: type,
       description: type,
       objectId: createObjectId(arg),
       preview: {
-        type: subtype,
+        type: lowerDataType.object,
         description: type,
         overflow: false,
         properties: Object.keys(arg).map((key) => previewProperties(arg, key))
@@ -67,18 +69,17 @@ const dataTypeFn: Record<string, (option: Option) => any> = {
     }
   },
   array: (options) => {
-    const { arg, type, subtype } = options
-    const typeLower = type.toLocaleLowerCase()
+    const { arg, type, typeLower } = options
     const desc = `${type}(${arg.length})`
     return {
-      type: typeLower,
-      subtype,
+      type: lowerDataType.object,
+      subtype: typeLower,
       className: type,
       description: desc,
       objectId: createObjectId(arg),
       preview: {
-        type: typeLower,
-        subtype,
+        type: lowerDataType.object,
+        subtype: typeLower,
         description: desc,
         overflow: false,
         properties: Object.keys(arg).map((key) => previewProperties(arg, key))
@@ -88,7 +89,7 @@ const dataTypeFn: Record<string, (option: Option) => any> = {
 }
 
 function objectArgs(options: Option) {
-  const fn = dataTypeFn[options.type]
+  const fn = dataTypeFn[options.typeLower]
   return fn(options)
 }
 function previewProperties(arg, key) {
@@ -149,9 +150,9 @@ export function getObjectById(objectId: string) {
 
 export function handleObjectArg(arg: object) {
   const type = getValueType(arg) // 'Null'
-  const subtype = type.toLocaleLowerCase() // 'null
+  const typeLower = type.toLocaleLowerCase() // 'null
   if (dataType.null === type) {
     return nullArgs({ arg: null })
   }
-  return objectArgs({ arg, type, subtype })
+  return objectArgs({ arg, type, typeLower })
 }
