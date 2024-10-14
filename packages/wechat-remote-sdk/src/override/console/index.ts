@@ -38,9 +38,9 @@ export function overrideConsole(send: any) {
   })
 }
 
-function handleArgs(args: Args, funcName: string) {
+function handleArgs(args: Args, funcName?: string) {
   if (!Array.isArray(args)) return
-  if (!args.length) {
+  if (!args.length && funcName) {
     const noArgsFn = {
       group: handleNoArgsConsoleGroup,
       groupEnd: handleNoArgsConsoleGroup

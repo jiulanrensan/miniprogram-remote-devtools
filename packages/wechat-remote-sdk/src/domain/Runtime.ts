@@ -1,6 +1,7 @@
 import {
   Domain,
   getValueType,
+  lowerDataType,
   noPropertyDataType,
   Runtime as RuntimeDomain
 } from '@miniprogram-remote-devtools/common'
@@ -27,26 +28,23 @@ export class Runtime extends Base {
         // ownProperties 为 false 时会去获取原型链上的属性，现在只处理获取本身属性的场景
         const { objectId, ownProperties } = params as { objectId: string; ownProperties: boolean }
         const target = getObjectById(objectId)
-        function addValue(options: {
-          target: object
-          key: string
-          objectId: string
-          type: (typeof noPropertyDataType)[number]
-        }) {
-          const { target, key, objectId, type } = options
+        function addValue(options: { target: object; key: string; objectId: string }) {
+          const { target, key, objectId } = options
+          const type = getValueType(target[key])
           const obj = target[key]
           const result = {
             type: type.toLocaleLowerCase(),
             description: String(obj)
           }
-          if (noPropertyDataType.includes(type)) {
+          if (noPropertyDataType.includes(type as (typeof noPropertyDataType)[number])) {
             return {
               ...result,
               value: obj
             }
           }
           return {
-            type: type.toLocaleLowerCase(),
+            type: lowerDataType.object,
+            subType: type.toLocaleLowerCase(),
             description: type,
             className: type,
             objectId: `${objectId}.${key}`,
@@ -65,14 +63,13 @@ export class Runtime extends Base {
             }
           }
         }
+        const descriptors = Object.getOwnPropertyDescriptors(target)
         const res = {
-          result: Object.keys(target).map((key) => {
-            const descriptors = Object.getOwnPropertyDescriptor(target, key)
-            const type = getValueType(target[key]) as (typeof noPropertyDataType)[number]
+          result: Object.keys(descriptors).map((key) => {
             return {
-              ...descriptors,
+              ...descriptors[key],
               name: key,
-              value: addValue({ target, key, objectId, type }),
+              value: addValue({ target, key, objectId }),
               isOwn: true
             }
           })

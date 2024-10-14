@@ -23,7 +23,7 @@ import {
  *  - RegExp
  *  - Date
  */
-type Option = { arg: any; type: string; typeLower: string }
+type Option = { arg: any; type: string; typeLower: string; objectId?: string }
 
 /**
  * object <=> objectId 要有绑定关系
@@ -51,6 +51,9 @@ function nullArgs({ arg }: { arg: null }) {
   }
 }
 
+/**
+ * typeof 为 object 类型
+ */
 const dataTypeFn: Record<string, (option: Option) => any> = {
   object: (options) => {
     const { arg, type, typeLower } = options
@@ -148,11 +151,11 @@ export function getObjectById(objectId: string) {
 //    getObjectValueByPath(arg, path)
 // }
 
-export function handleObjectArg(arg: object) {
+export function handleObjectArg(arg: object, objectId?: string) {
   const type = getValueType(arg) // 'Null'
   const typeLower = type.toLocaleLowerCase() // 'null
   if (dataType.null === type) {
     return nullArgs({ arg: null })
   }
-  return objectArgs({ arg, type, typeLower })
+  return objectArgs({ arg, type, typeLower, objectId })
 }
