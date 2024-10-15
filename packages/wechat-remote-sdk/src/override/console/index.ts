@@ -15,7 +15,7 @@ type Args = Array<any>
 export function overrideConsole(send: any) {
   ;[log, info, warn, error, debug, group, groupEnd].forEach((fn) => {
     function sendConsole(...args) {
-      const packageArgs = handleArgs(args, fn.name)
+      const packageArgs = handleConsoleArgs(args, fn.name)
       if (packageArgs)
         send({
           method: Runtime.events.consoleAPICalled,
@@ -38,7 +38,7 @@ export function overrideConsole(send: any) {
   })
 }
 
-function handleArgs(args: Args, funcName?: string) {
+function handleConsoleArgs(args: Args, funcName?: string) {
   if (!Array.isArray(args)) return
   if (!args.length && funcName) {
     const noArgsFn = {
@@ -48,14 +48,7 @@ function handleArgs(args: Args, funcName?: string) {
     if (!noArgsFn) return
     return noArgsFn(funcName)
   }
-  return args.map((arg) => {
-    const fn = handleArgsMap[typeof arg]
-    if (!fn) {
-      log('unsupported type', typeof arg)
-      return {}
-    }
-    return fn(arg)
-  })
+  return args.map((arg) => handleArgs(arg))
 }
 
 function handleNoArgsConsoleGroup(funcName: string) {
@@ -66,7 +59,22 @@ function handleNoArgsConsoleGroup(funcName: string) {
   }
 }
 
-const handleArgsMap = {
+export function handleArgs(
+  arg: object,
+  otherOptions?: {
+    objectId: string
+    key: string
+  }
+) {
+  const fn = handleArgsMap[typeof arg]
+  if (!fn) {
+    log('unsupported type', typeof arg)
+    return {}
+  }
+  return fn(arg, otherOptions)
+}
+
+export const handleArgsMap = {
   [lowerDataType.string]: (arg) => {
     return {
       type: lowerDataType.string,

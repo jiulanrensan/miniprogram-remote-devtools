@@ -23,7 +23,7 @@ import {
  *  - RegExp
  *  - Date
  */
-type Option = { arg: any; type: string; typeLower: string; objectId?: string }
+type Option = { arg: any; key?: string; objectId?: string }
 
 /**
  * object <=> objectId 要有绑定关系
@@ -56,13 +56,14 @@ function nullArgs({ arg }: { arg: null }) {
  */
 const dataTypeFn: Record<string, (option: Option) => any> = {
   object: (options) => {
-    const { arg, type, typeLower } = options
+    const { arg, key, objectId } = options
+    const type = getValueType(arg)
     return {
       // 这里的type都要用'object'，subtype才用具体类型，下面preview同理
       type: lowerDataType.object,
       className: type,
       description: type,
-      objectId: createObjectId(arg),
+      objectId: createObjectId(options),
       preview: {
         type: lowerDataType.object,
         description: type,
@@ -72,14 +73,16 @@ const dataTypeFn: Record<string, (option: Option) => any> = {
     }
   },
   array: (options) => {
-    const { arg, type, typeLower } = options
+    const { arg } = options
+    const type = getValueType(arg)
+    const typeLower = type.toLocaleLowerCase()
     const desc = `${type}(${arg.length})`
     return {
       type: lowerDataType.object,
       subtype: typeLower,
       className: type,
       description: desc,
-      objectId: createObjectId(arg),
+      objectId: createObjectId(options),
       preview: {
         type: lowerDataType.object,
         subtype: typeLower,
@@ -92,7 +95,9 @@ const dataTypeFn: Record<string, (option: Option) => any> = {
 }
 
 function objectArgs(options: Option) {
-  const fn = dataTypeFn[options.typeLower]
+  const type = getValueType(options.arg)
+  const typeLower = type.toLocaleLowerCase()
+  const fn = dataTypeFn[typeLower]
   return fn(options)
 }
 function previewProperties(arg, key) {
@@ -106,7 +111,11 @@ function previewProperties(arg, key) {
   }
 }
 
-function createObjectId(arg: object): string {
+function createObjectId(options: Option): string {
+  const { arg, key, objectId } = options
+  if (key) {
+    return `${objectId}.${key}`
+  }
   if (objectToIdMap.has(arg)) {
     return objectToIdMap.get(arg)!
   }
@@ -151,11 +160,18 @@ export function getObjectById(objectId: string) {
 //    getObjectValueByPath(arg, path)
 // }
 
-export function handleObjectArg(arg: object, objectId?: string) {
+export function handleObjectArg(
+  arg: object,
+  otherOptions?: {
+    objectId: string
+    key: string
+  }
+) {
   const type = getValueType(arg) // 'Null'
-  const typeLower = type.toLocaleLowerCase() // 'null
+  // const typeLower = type.toLocaleLowerCase() // 'null
   if (dataType.null === type) {
     return nullArgs({ arg: null })
   }
-  return objectArgs({ arg, type, typeLower, objectId })
+  const { objectId, key } = otherOptions || {}
+  return objectArgs({ arg, key, objectId })
 }
